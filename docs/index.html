@@ -218,6 +218,24 @@
     </div>
   </div>
 
+  <h2 class="section">Why Hermes, and not just scripts and Claude Code?</h2>
+  <p class="lead">A fair question I asked myself: Claude Code could wire this up with macOS <code>launchd</code>, shell scripts and <code>claude -p</code>. Here's what Hermes gives this project that I'd otherwise have to build and maintain myself.</p>
+  <div class="panel">
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Hermes provides</th><th>Doing it myself would mean</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Always-on scheduling.</strong> Jobs run every morning whether I'm at the Mac or not, catch up after downtime, and keep a run history.</td><td>Writing and maintaining my own <code>launchd</code> jobs, logging and retries</td></tr>
+          <tr><td><strong>Delivery built in.</strong> Email and Telegram from one place, with failure notices when something goes wrong.</td><td>A separate sender and alerting for each channel</td></tr>
+          <tr><td><strong>A free model for light judgment.</strong> Writing the briefing, finding prices, ranking a shortlist, at no per-run cost.</td><td><code>claude -p</code> runs that draw on my Claude plan's usage limits every day</td></tr>
+          <tr><td><strong>Two-way conversation.</strong> I can message Hermes on Telegram or email and it acts on the request.</td><td>No equivalent; Claude Code runs only when I start it</td></tr>
+          <tr><td><strong>Skills.</strong> Each job's instructions live in a skill that Hermes loads every run.</td><td>Prompts scattered across scripts</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="answer">The split that works: <strong>Hermes</strong> is the always-on runtime and messenger, <strong>scripts</strong> own the steps that must always happen, and <strong>Claude Code</strong> builds and audits them. The lessons on this page are about getting that split right.</div>
+  </div>
+
   <h2 class="section">A morning, step by step</h2>
   <p class="lead">Replay Oct 7 as the jobs first ran, then as they run after the redesign. Purple steps are scripts that must always happen; blue steps are the model's judgment.</p>
   <div class="panel">

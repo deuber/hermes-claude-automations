@@ -34,6 +34,24 @@ every morning, with the model doing only what models are good at.
 **Knowing which tool fits which job is the skill.** That's what I'd help
 Hermes users figure out.
 
+## Why Hermes, and not just scripts and Claude Code?
+
+A fair question I asked myself: Claude Code could wire this up with macOS
+`launchd`, shell scripts and `claude -p`. Here's what Hermes gives this
+project that I'd otherwise have to build and maintain myself:
+
+| Hermes provides | Doing it myself would mean |
+|---|---|
+| **Always-on scheduling.** Jobs run every morning whether I'm at the Mac or not, catch up after downtime, and keep a run history. | Writing and maintaining my own `launchd` jobs, logging and retries |
+| **Delivery built in.** Email and Telegram from one place, with failure notices when something goes wrong. | A separate sender and alerting for each channel |
+| **A free model for light judgment.** Writing the briefing, finding prices, ranking a shortlist, at no per-run cost. | `claude -p` runs that draw on my Claude plan's usage limits every day |
+| **Two-way conversation.** I can message Hermes on Telegram or email and it acts on the request. | No equivalent; Claude Code runs only when I start it |
+| **Skills.** Each job's instructions live in a skill that Hermes loads every run. | Prompts scattered across scripts |
+
+The split that works: **Hermes** is the always-on runtime and messenger,
+**scripts** own the steps that must always happen, and **Claude Code** builds
+and audits them. The lessons below are about getting that split right.
+
 ## What's running
 
 | Job | Schedule (PT) | Script does | Model does |
