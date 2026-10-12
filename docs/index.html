@@ -264,7 +264,7 @@
       <li><strong>Verify against the system of record, not the agent's report.</strong> The agent called an iMessage "delivered" from an exit code, and a run "succeeded" without writing its log.</li>
       <li><strong>Keep one source of truth.</strong> A stale job prompt overrode an updated skill, and each run inherited the last run's conclusions.</li>
       <li><strong>Check the stronger model too.</strong> Claude Code first said a job didn't exist; it corrected itself because I required it to check <code>hermes cron list</code> first.</li>
-      <li><strong>Test the path the real job uses.</strong> Manual and scheduled runs send email differently. Every manual test of the new email subjects passed; only a one-time scheduled copy of the job reproduced the real failure.</li>
+      <li><strong>Test the path the real job uses.</strong> My email-subject tests sent clean text straight to the mailer and all passed. Real cron jobs add a "Cronjob Response" header first, which hid the subject line. Only running an actual copy of the job reproduced the failure.</li>
       <li><strong>Pay for a stronger model only where judgment is the bottleneck.</strong> Once scripts did the fetching and filtering, Claude and the free model reached the same result on the same shortlist.</li>
     </ol>
   </div>

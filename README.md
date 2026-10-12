@@ -99,11 +99,11 @@ with a throwaway job that ran the calendar check from inside the gateway.
 email arrived as "Re: Hermes Agent", stacked in one Gmail thread. Hermes has
 no subject setting (`hermes send --subject` only adds a line to the body), so
 Claude Code made a small local patch: a first line `Subject: …` becomes the
-real subject. Every manual test passed, but the first scheduled test still
-said "Re: Hermes Agent". Scheduled runs go through a different send path that
-adds a "Cronjob Response" header above the output, which pushed the subject
-line down. Turning that header off (`cron.wrap_response: false`) fixed it,
-confirmed by a one-time *scheduled* copy of the briefing. The patch and a
+real subject. The patch's tests sent clean text straight to the mailer and
+all passed, but real cron jobs still said "Re: Hermes Agent". Cron jobs add a
+"Cronjob Response" header above their output, which pushed the subject line
+down. Turning that header off (`cron.wrap_response: false`) fixed it,
+confirmed by a one-time scheduled copy of the briefing. The patch and a
 re-apply script live outside Hermes, so a Hermes update can't silently drop
 the fix.
 
@@ -139,9 +139,10 @@ result on the same data, so the job stays on the free model.
 5. **Check the stronger model too.** Claude Code first reported that a job
    didn't exist, and corrected itself only because I required it to run
    `hermes cron list` before recreating anything.
-6. **Test the path the real job uses.** Manual runs and scheduled runs send
-   email differently. Every manual test of the new subjects passed; only a
-   one-time scheduled copy of the job reproduced the real failure.
+6. **Test the path the real job uses.** My email-subject tests sent clean
+   text straight to the mailer and all passed. Real cron jobs add a
+   "Cronjob Response" header first, which hid the subject line. Only running
+   an actual copy of the job reproduced the failure.
 7. **Pay for a stronger model only where judgment is the bottleneck.** Once
    scripts did the fetching and filtering, Claude and the free model reached
    the same result on the same shortlist.
