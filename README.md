@@ -93,11 +93,42 @@ for calendar access on osascript's behalf, and only shows the prompt when
 someone is at the Mac. One click on Allow fixed it; Claude Code confirmed it
 with a throwaway job that ran the calendar check from inside the gateway.
 
+## Follow-ups (Oct 10–12)
+
+**Email subjects: only a real scheduled run found the bug.** Every Hermes
+email arrived as "Re: Hermes Agent", stacked in one Gmail thread. Hermes has
+no subject setting (`hermes send --subject` only adds a line to the body), so
+Claude Code made a small local patch: a first line `Subject: …` becomes the
+real subject. Every manual test passed, but the first scheduled test still
+said "Re: Hermes Agent". Scheduled runs go through a different send path that
+adds a "Cronjob Response" header above the output, which pushed the subject
+line down. Turning that header off (`cron.wrap_response: false`) fixed it,
+confirmed by a one-time *scheduled* copy of the briefing. The patch and a
+re-apply script live outside Hermes, so a Hermes update can't silently drop
+the fix.
+
+**Fuel savings: math in code, not in the model's text.** The gas email now
+compares two nearby stations: price gap, savings per fill for two vehicles,
+and net savings after the detour ("Not worth the drive" when it's negative).
+The script does the math in exact decimals, rounded to the cent. The Hermes
+job pastes the script's output word for word, checked against the script's
+own output. Known-answer tests covered a half-cent rounding case, a net of
+exactly $0.00, and missing prices.
+
+**Job titles: a filter instead of a judgment call.** "Solutions Engineer
+(support-focused only)" was judged differently from day to day: the same
+pre-sales role was skipped one morning and reported as a match the next.
+Those titles now never reach the model: the prefetch filter drops them,
+cutting title matches from 645 to 311 with no support roles lost in testing. A
+side-by-side check then found Claude and the free model reaching the same
+result on the same data, so the job stays on the free model.
+
 ## Patterns I learned
 
 1. **Use the AI for judgment, and scripts for steps that must always
-   happen.** Applied four times: the job-search email, the gas CSV and
-   email, job-board fetching, and the job-search log.
+   happen.** Applied six times: the job-search email, the gas CSV and
+   email, job-board fetching, the job-search log, the savings math, and the
+   job-title filter.
 2. **Test with data where you already know the right answer.** Twice the
    agent's own "proof" of a fix contained the bug.
 3. **Verify against the system of record, not the agent's report.** The
@@ -108,6 +139,12 @@ with a throwaway job that ran the calendar check from inside the gateway.
 5. **Check the stronger model too.** Claude Code first reported that a job
    didn't exist, and corrected itself only because I required it to run
    `hermes cron list` before recreating anything.
+6. **Test the path the real job uses.** Manual runs and scheduled runs send
+   email differently. Every manual test of the new subjects passed; only a
+   one-time scheduled copy of the job reproduced the real failure.
+7. **Pay for a stronger model only where judgment is the bottleneck.** Once
+   scripts did the fetching and filtering, Claude and the free model reached
+   the same result on the same shortlist.
 
 ## How I drove the agents
 
@@ -126,8 +163,8 @@ Code and Hermes, lightly edited. A few habits made the biggest difference:
 
 ## Feedback for the product
 
-I logged 27 friction items. These six would likely drive the most support
-tickets:
+I logged 27 friction items in the first five days. These six would likely
+drive the most support tickets, plus one found later (email subjects):
 
 | Area | What I saw | Suggested fix |
 |---|---|---|
@@ -137,6 +174,7 @@ tickets:
 | Free models on long runs | Repetition loops at ~110–140K tokens; fallback doesn't trigger on loops | Warn when cron context grows large; allow fallback on degenerate output |
 | macOS permissions under cron | Calendar access requested for `osascript`, only when someone is at the Mac | Document the step; check it in a doctor command |
 | Look-alike apps | Two "Hermes" look-alikes in the App Store; one asks for a Telegram bot token | An official downloads page; warn never to paste tokens into third-party apps |
+| Email subjects | Every email arrives as "Re: Hermes Agent" in one thread; `hermes send --subject` only adds a body line | Let cron jobs and `hermes send` set the real subject |
 
 ## Repo structure
 
