@@ -237,10 +237,10 @@
   </div>
 
   <h2 class="section">A morning, step by step</h2>
-  <p class="lead">Replay Oct 7 as the jobs first ran, then as they run after the redesign. Purple steps are scripts that must always happen; blue steps are the model's judgment.</p>
+  <p class="lead">Replay Oct 7 as the jobs first ran, then a Monday as they run now, including the weekly gas price check. Purple steps are scripts that must always happen; blue steps are the model's judgment.</p>
   <div class="panel">
     <div class="panel-head">
-      <h3>Weekday morning run</h3>
+      <h3>Morning run (Mondays add the gas price check)</h3>
       <div class="actions">
         <button class="btn" id="playBefore">Play: before the fixes</button>
         <button class="btn primary" id="playAfter">Play: after the fixes</button>
@@ -366,6 +366,10 @@ Hybrid sedan · 41 mpg
         log: [["ok", "jobsearch.py record --unranked: log written before the model runs."]] },
       { time: "8:01", job: "Job search", step: "Rank shortlist, re-record", by: "model", result: ["ok", "1 new match"],
         log: [["info", "Model ranked the shortlist against the profile (peak ~44K tokens, ~2 min)."], ["ok", "Log re-recorded with rankings: 1 new match, 3 already applied, 19 skipped."]] },
+      { time: "8:15", job: "Gas prices (Mon)", step: "Find three stations' prices", by: "model", result: ["ok", "3 prices"],
+        log: [["info", "Free model looked up three stations and cross-checked a second source."], ["ok", "Prices written to a small JSON file. That's all the model does."]] },
+      { time: "8:45", job: "Gas price email (Mon)", step: "History, flags, savings, email", by: "script", result: ["ok", "Sent"],
+        log: [["info", "compare_prices.py: price history updated; big jumps and source disagreements flagged."], ["ok", "Savings computed in exact cents: $2.37/gal gap; the SUV nets $29.64 per fill after the detour. Email sent."]] },
       { time: "8:50", job: "Job search email", step: "Email today's log", by: "script", result: ["ok", "Sent"],
         log: [["ok", "send_job_log.sh: today's ranked log emailed."]] }
     ]
@@ -406,7 +410,7 @@ Hybrid sedan · 41 mpg
     var steps = RUNS[which];
     renderRows(steps);
     con.innerHTML = "";
-    log("info", which === "before" ? "Replaying Oct 7, 7:58 AM, before the fixes..." : "Replaying a morning after the fixes...");
+    log("info", which === "before" ? "Replaying Oct 7, 7:58 AM, before the fixes..." : "Replaying a Monday morning after the fixes...");
     btnBefore.disabled = btnAfter.disabled = true;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var gap = reduce ? 150 : 1100;
@@ -423,7 +427,7 @@ Hybrid sedan · 41 mpg
       var prev = document.querySelector("tr.active"); if (prev) prev.classList.remove("active");
       log(which === "before" ? "warn" : "ok", which === "before"
         ? "Morning done: 2 failures. The 8:50 safety net made them visible."
-        : "Morning done: every step succeeded. Scripts guaranteed the outputs; the model did the ranking.");
+        : "Morning done: every step succeeded. Scripts guaranteed the outputs; the model did the judgment: the briefing, the gas prices and the ranking.");
       btnBefore.disabled = btnAfter.disabled = false;
     }, gap * (steps.length + 1)));
   }
