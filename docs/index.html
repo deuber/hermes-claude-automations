@@ -267,6 +267,34 @@
     </div>
   </div>
 
+  <h2 class="section">The gas price check: why it exists</h2>
+  <p class="lead">Gas where I live costs far more than it does a short drive away, where prices are much closer to the national average. On Oct 10 the station in town was $7.46 a gallon and one a short drive away was $5.09, a gap of $2.37 a gallon. So every Monday morning Hermes checks three stations and emails whether the drive is worth it.</p>
+  <div class="panel">
+    <ol class="patterns">
+      <li><strong>Hermes finds the prices (8:15).</strong> The free model looks up all three stations, cross-checks a second source, and writes a small JSON file. That's all the model does.</li>
+      <li><strong>A script does everything that must be exact (8:45).</strong> It keeps the price history, flags big jumps or sources that disagree, and sends the email.</li>
+      <li><strong>The savings math is code, not model text.</strong> Price gap, savings per fill for each vehicle, and net savings after the detour, in exact cents. If the detour costs more than it saves, the email says "Not worth the drive."</li>
+    </ol>
+    <div class="console" style="height:auto">⛽ Gas Prices — Sat, Oct 10, 2026   <span class="t">(excerpt; station names generalized)</span>
+
+1) Station in town          $7.46
+2) Station a short drive    $5.09
+3) Third station            $5.09
+
+💰 SAVINGS: In town vs. a short drive
+   $7.46 − $5.09 = $2.37/gal · detour 16 mi round trip
+
+SUV · 23 mpg
+   Typical fill (14 gal): save $33.18
+   Full tank (19 gal): save $45.03
+   Net after detour: $29.64
+
+Hybrid sedan · 41 mpg
+   Typical fill (11 gal): save $26.07
+   Full tank (14.5 gal): save $34.37
+   Net after detour: $24.08</div>
+  </div>
+
   <h2 class="section">Which tool would I use?</h2>
   <p class="lead">Pick a task. This is the judgment I'd help Hermes users make.</p>
   <div class="panel">

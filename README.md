@@ -90,6 +90,12 @@ Claude Code built and tested:
 
 ### 2. The gas-price email: two sources of truth
 
+**Why it exists:** gas where I live costs far more than it does a short
+drive away, where prices are much closer to the national average. On Oct 10
+the station in town was $7.46 a gallon and one a short drive away was $5.09.
+The Monday email checks three stations and says whether the drive is worth
+it, with net savings per fill after the detour.
+
 The weekly gas email kept ignoring its updated skill. The run transcript
 showed why: the job's own prompt still had the old instructions, and the
 stale one won. Even after that was fixed, the model kept writing the CSV
