@@ -119,9 +119,17 @@ exactly $0.00, and missing prices.
 (support-focused only)" was judged differently from day to day: the same
 pre-sales role was skipped one morning and reported as a match the next.
 Those titles now never reach the model: the prefetch filter drops them,
-cutting title matches from 645 to 311 with no support roles lost in testing. A
-side-by-side check then found Claude and the free model reaching the same
-result on the same data, so the job stays on the free model.
+cutting title matches from 645 to 311 with no support roles lost in testing.
+
+**An open question: is the free model good enough?** I considered moving the
+job-search ranking step from the free model to Claude. My Claude Pro plan
+can't power Hermes directly (Hermes's Claude sign-in needs a Max plan with
+extra usage credits, or a pay-per-token API key), so the option is to run
+that one step with Claude Code instead. I'll switch only if the results show
+it's needed. The first side-by-side check agreed, but both models found zero
+new matches that day, which is weak evidence. I'm running the comparison over
+time, on days with real candidates, before deciding. The job is unchanged
+until then.
 
 ## Patterns I learned
 
@@ -143,9 +151,10 @@ result on the same data, so the job stays on the free model.
    text straight to the mailer and all passed. Real cron jobs add a
    "Cronjob Response" header first, which hid the subject line. Only running
    an actual copy of the job reproduced the failure.
-7. **Pay for a stronger model only where judgment is the bottleneck.** Once
-   scripts did the fetching and filtering, Claude and the free model reached
-   the same result on the same shortlist.
+7. **Pay for a stronger model only where the results show it's needed.** I'm
+   comparing Claude against the free model on the same shortlist over time
+   before switching. The first check agreed, but on a day with nothing to
+   disagree about.
 
 ## How I drove the agents
 

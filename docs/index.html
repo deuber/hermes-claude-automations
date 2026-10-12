@@ -265,7 +265,7 @@
       <li><strong>Keep one source of truth.</strong> A stale job prompt overrode an updated skill, and each run inherited the last run's conclusions.</li>
       <li><strong>Check the stronger model too.</strong> Claude Code first said a job didn't exist; it corrected itself because I required it to check <code>hermes cron list</code> first.</li>
       <li><strong>Test the path the real job uses.</strong> My email-subject tests sent clean text straight to the mailer and all passed. Real cron jobs add a "Cronjob Response" header first, which hid the subject line. Only running an actual copy of the job reproduced the failure.</li>
-      <li><strong>Pay for a stronger model only where judgment is the bottleneck.</strong> Once scripts did the fetching and filtering, Claude and the free model reached the same result on the same shortlist.</li>
+      <li><strong>Pay for a stronger model only where the results show it's needed.</strong> I'm comparing Claude against the free model on the same job-search shortlist over time before switching. The first check agreed, but on a day with nothing to disagree about, so it's still an open question.</li>
     </ol>
   </div>
 
