@@ -145,15 +145,16 @@ pre-sales role was skipped one morning and reported as a match the next.
 Those titles now never reach the model: the prefetch filter drops them,
 cutting title matches from 645 to 311 with no support roles lost in testing.
 
-**An open question: is the free model good enough?** I considered moving the
-job-search ranking step from the free model to Claude. My Claude Pro plan
-can't power Hermes directly (Hermes's Claude sign-in needs a Max plan with
-extra usage credits, or a pay-per-token API key), so the option is to run
-that one step with Claude Code instead. I'll switch only if the results show
-it's needed. The first side-by-side check agreed, but both models found zero
-new matches that day, which is weak evidence. I'm running the comparison over
-time, on days with real candidates, before deciding. The job is unchanged
-until then.
+**Free models have limits, so the job search is getting a new split.** Scripts
+now guarantee the outputs, so even a bad run leaves a log. But the free model is
+never fully predictable: it can still skip a step, and on Oct 16 a trial
+discovery step (six web searches) made it loop again at about 45K tokens. My
+plan: **Claude Code does the heavy lifting** for the job search (ranking,
+eligibility checks, discovery) through daily `claude -p` runs that draw on my
+Claude plan's usage limits, and **Hermes keeps what it does best**: running the
+schedule and delivering the email. My Claude Pro plan can't power Hermes's own
+model directly (Hermes's Claude sign-in needs a Max plan with extra usage
+credits, or a pay-per-token API key), which is why Claude Code runs those steps.
 
 ## Patterns I learned
 
@@ -175,10 +176,10 @@ until then.
    text straight to the mailer and all passed. Real cron jobs add a
    "Cronjob Response" header first, which hid the subject line. Only running
    an actual copy of the job reproduced the failure.
-7. **Pay for a stronger model only where the results show it's needed.** I'm
-   comparing Claude against the free model on the same shortlist over time
-   before switching. The first check agreed, but on a day with nothing to
-   disagree about.
+7. **Free models have limits; plan for them.** Scripts guarantee the outputs
+   even when the free model skips a step or loops. For the job search's heavy
+   lifting, I'm moving to Claude Code (`claude -p`) on my Claude plan, with
+   Hermes handling the schedule and email.
 
 ## How I drove the agents
 
